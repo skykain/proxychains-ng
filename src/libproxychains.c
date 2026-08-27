@@ -458,7 +458,7 @@ inv_host:
 							if (valid) {
 								if(local_family == AF_INET && local_prefix <= 32) {
 									localnet_addr[num_localnet_addr].in_mask.s_addr =
-										htonl(0xFFFFFFFFu << (32u - local_prefix));
+										local_prefix ? htonl(0xFFFFFFFFu << (32u - local_prefix)) : 0;
 								} else if(local_family == AF_INET6 && local_prefix <= 128) {
 									localnet_addr[num_localnet_addr].in6_prefix =
 										local_prefix;
