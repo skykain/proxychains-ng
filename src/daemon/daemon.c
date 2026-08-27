@@ -219,6 +219,7 @@ int main(int argc, char** argv) {
 		} else {
 			dolog("%s: unknown request %u\n", ipstr(&c.addr, ipstr_buf),
 			      (unsigned) msg.h.msgtype);
+			FAIL();
 		}
 	sendresp:;
 		if(failed) {
