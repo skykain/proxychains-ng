@@ -996,7 +996,7 @@ err_nn:
 			goto err_nn;
 	} else if(node) {
 		af = ((struct sockaddr_in *) &space->sockaddr_space)->sin_family;
-	} else if(!node && !(hints->ai_flags & AI_PASSIVE)) {
+	} else if(!node && !(hints && (hints->ai_flags & AI_PASSIVE))) {
 		af = ((struct sockaddr_in *) &space->sockaddr_space)->sin_family = AF_INET;
 		memcpy(&((struct sockaddr_in *) &space->sockaddr_space)->sin_addr,
 		       "\177\0\0\1", 4);
