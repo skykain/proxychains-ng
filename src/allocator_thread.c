@@ -246,7 +246,7 @@ static void* threadfunc(void* x) {
 				char *host = string_from_internal_ip(msg.m.ip);
 				if(host) {
 					size_t l = strlen(host);
-					assert(l+1 < MSG_LEN_MAX);
+					assert(l+1 <= MSG_LEN_MAX);
 					memcpy(msg.m.host, host, l + 1);
 					msg.h.datalen = l + 1;
 				} else {
@@ -268,9 +268,10 @@ static void* threadfunc(void* x) {
 
 ip_type4 at_get_ip_for_host(char* host, size_t len) {
 	ip_type4 readbuf;
+	struct at_msg msg = {.h.msgtype = ATM_GETIP };
 	MUTEX_LOCK(internal_ips_lock);
-	if(len > MSG_LEN_MAX) goto inv;
-	struct at_msg msg = {.h.msgtype = ATM_GETIP, .h.datalen = len + 1 };
+	if(len >= MSG_LEN_MAX) goto inv;
+	msg.h.datalen = len + 1;
 	memcpy(msg.m.host, host, len+1);
 	if(sendmessage(ATD_SERVER, &msg) &&
 	   getmessage(ATD_CLIENT, &msg)) readbuf = msg.m.ip;
